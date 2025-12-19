@@ -104,11 +104,30 @@ export default function LuckyWheelManager() {
 															}
 														}}
 														onChange={(e) => {
-															const value = parseInt(e.target.value);
-															if (!isNaN(value) && value >= 0 && value <= 100) {
-																updateItemWeight(index, value);
-															} else if (e.target.value === '') {
+															const inputValue = e.target.value;
+															// Cho phép xóa để nhập lại
+															if (inputValue === '') {
 																updateItemWeight(index, 0);
+																return;
+															}
+															
+															const numValue = parseInt(inputValue, 10);
+															// Nếu parse thành công và trong khoảng hợp lệ
+															if (!isNaN(numValue) && numValue >= 0 && numValue <= 100) {
+																updateItemWeight(index, numValue);
+															}
+															// Nếu nhập số > 100, giới hạn ở 100
+															else if (!isNaN(numValue) && numValue > 100) {
+																updateItemWeight(index, 100);
+															}
+														}}
+														onBlur={(e) => {
+															// Khi mất focus, đảm bảo giá trị hợp lệ
+															const numValue = parseInt(e.target.value, 10);
+															if (isNaN(numValue) || numValue < 0) {
+																updateItemWeight(index, 0);
+															} else if (numValue > 100) {
+																updateItemWeight(index, 100);
 															}
 														}}
 													/>

@@ -46,11 +46,14 @@ export const LuckyWheelProvider = ({ children }: { children: React.ReactNode }) 
   };
 
   const updateItemWeight = (index: number, weight: number) => {
-    if (weight < 0 || weight > 100) return;
-    const updatedItems = items.map((item, i) => 
-      i === index ? { ...item, weight } : item
+    // Đảm bảo weight trong khoảng hợp lệ
+    const validWeight = Math.max(0, Math.min(100, weight));
+    
+    setItems((prevItems) => 
+      prevItems.map((item, i) => 
+        i === index ? { ...item, weight: validWeight } : item
+      )
     );
-    setItems(updatedItems);
   };
 
   return (
