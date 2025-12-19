@@ -1,8 +1,21 @@
 "use client";
 
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 
 type WheelItem = { label: string; weight: number };
+
+const STORAGE_KEY = "lucky-wheel-items";
+
+const defaultItems: WheelItem[] = [
+  { label: "Nhất 🏆", weight: 1 },
+  { label: "Nhì 🥈", weight: 0 },
+  { label: "Ba 🥉", weight: 0 },
+  { label: "Jackpot 💎", weight: 0 },
+  { label: "Bonus 💰", weight: 0 },
+  { label: "Chúc may mắn 🍀", weight: 0 },
+  { label: "Thử lại 🔄", weight: 0 },
+  { label: "Khuyến khích 🎖️", weight: 0 },
+];
 
 type LuckyWheelContextType = {
   items: WheelItem[];
@@ -16,16 +29,42 @@ type LuckyWheelContextType = {
 const LuckyWheelContext = createContext<LuckyWheelContextType | undefined>(undefined);
 
 export const LuckyWheelProvider = ({ children }: { children: React.ReactNode }) => {
-  const [items, setItems] = useState<WheelItem[]>([
-    { label: "Nhất 🏆", weight: 1 },
-    { label: "Nhì 🥈", weight: 0 },
-    { label: "Ba 🥉", weight: 0 },
-    { label: "Jackpot 💎", weight: 0 },
-    { label: "Bonus 💰", weight: 0 },
-    { label: "Chúc may mắn 🍀", weight: 0 },
-    { label: "Thử lại 🔄", weight: 0 },
-    { label: "Khuyến khích 🎖️", weight: 0 },
-  ]);
+  // Khởi tạo state - load từ localStorage nếu có, nếu không dùng default
+  const [items, setItems] = useState<WheelItem[]>(() => {
+    // Chỉ chạy trên client
+    if (typeof window !== "undefined") {
+      try {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (stored) {
+          const parsedItems = JSON.parse(stored);
+          if (Array.isArray(parsedItems) && parsedItems.length > 0) {
+            return parsedItems;
+          }
+        }
+      } catch (error) {
+        console.error("Error loading items from localStorage:", error);
+      }
+    }
+    return defaultItems;
+  });
+
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  // Đánh dấu đã initialized sau khi mount
+  useEffect(() => {
+    setIsInitialized(true);
+  }, []);
+
+  // Lưu vào localStorage mỗi khi items thay đổi
+  useEffect(() => {
+    if (isInitialized) {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+      } catch (error) {
+        console.error("Error saving items to localStorage:", error);
+      }
+    }
+  }, [items, isInitialized]);
 
   const colors = [
     "#4CAF50", "#2196F3", "#9C27B0", "#F44336",
@@ -34,15 +73,21 @@ export const LuckyWheelProvider = ({ children }: { children: React.ReactNode }) 
   ];
 
   const addItem = (label: string) => {
-    if (label.trim() && items.length < 12) {
-      setItems([...items, { label: label.trim(), weight: 1 }]);
-    }
+    setItems((prevItems) => {
+      if (label.trim() && prevItems.length < 12) {
+        return [...prevItems, { label: label.trim(), weight: 1 }];
+      }
+      return prevItems;
+    });
   };
 
   const removeItem = (index: number) => {
-    if (items.length > 2) {
-      setItems(items.filter((_, i) => i !== index));
-    }
+    setItems((prevItems) => {
+      if (prevItems.length > 2) {
+        return prevItems.filter((_, i) => i !== index);
+      }
+      return prevItems;
+    });
   };
 
   const updateItemWeight = (index: number, weight: number) => {

@@ -1,10 +1,5 @@
 import LuckyWheelDisplay from "@/components/ui/futuristic-wheel";
-import { LuckyWheelProvider } from "@/components/ui/LuckyWheelContext";
 
 export default function Home() {
-  return (
-    <LuckyWheelProvider>
-      <LuckyWheelDisplay />
-    </LuckyWheelProvider>
-  );
+  return <LuckyWheelDisplay />;
 }
