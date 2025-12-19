@@ -242,7 +242,7 @@ export default function LuckyWheelDisplay() {
                         };
 
                         // Từ màu gốc: nếu màu tối -> làm sáng nhiều; nếu màu sáng -> làm tối vừa phải
-                        const deriveIconColors = (_baseHex: string) => {
+                        const deriveIconColors = () => {
                           const iconBgColor     = 'rgba(31, 36, 45, 0.18)';  // nền tối, hơi trong suốt
                           const iconBorderColor = 'rgba(10, 12, 17, 0.05)';  // viền đậm
                           return { iconBgColor, iconBorderColor };
@@ -251,7 +251,8 @@ export default function LuckyWheelDisplay() {
                         const angle = index * segmentAngle + segmentAngle / 2;
                         const IconComponent = icons[index % icons.length];
                         // Lấy màu gốc
-                        const baseColor = colors[index % colors.length]
+                        const colorString = colors[index % colors.length];
+                        const baseColor = colorString
                           .split(' ')[0]
                           .replace('linear-gradient(135deg,', '')
                           .replace(',', '')
@@ -260,7 +261,7 @@ export default function LuckyWheelDisplay() {
                         const rgbColor = baseColor.includes('#') ? baseColor : '#667eea';
 
                         // Tự tăng/giảm sáng để nền nổi bật hơn
-                        const { iconBgColor, iconBorderColor } = deriveIconColors(rgbColor);
+                        const { iconBgColor, iconBorderColor } = deriveIconColors();
 
                         return (
                           <div

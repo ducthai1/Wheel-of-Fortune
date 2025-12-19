@@ -127,6 +127,7 @@ export default function ConfettiParty({show}: ConfettiPartyProps) {
     if (show) {
       fireParty()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [show])
 
   return (

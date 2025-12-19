@@ -139,9 +139,9 @@ export default function LuckyWheelManager() {
 								</h3>
 								<ul className="text-blue-600 space-y-2 font-medium">
 									<li>🎯 Thêm các mục bạn muốn vào danh sách</li>
-									<li>🎊 Nhấn "QUAY NGAY!" để bắt đầu quay</li>
+									<li>🎊 Nhấn &quot;QUAY NGAY!&quot; để bắt đầu quay</li>
 									<li>🎉 Vòng quay sẽ dừng và hiển thị kết quả</li>
-									<li>🔄 Sử dụng "Reset" để đặt lại vòng quay</li>
+									<li>🔄 Sử dụng &quot;Reset&quot; để đặt lại vòng quay</li>
 									<li>📝 Tối thiểu 2 mục, tối đa 12 mục</li>
 								</ul>
 							</CardContent>
