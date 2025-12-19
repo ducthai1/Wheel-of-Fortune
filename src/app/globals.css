@@ -120,3 +120,23 @@
     @apply bg-background text-foreground;
   }
 }
+
+
+/* Skeleton shimmer */
+.skeleton-loading{
+  position: relative;
+  overflow: hidden;
+}
+.skeleton-loading::after{
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,.28), transparent);
+  animation: skeleton-shimmer 2.8s infinite;
+  pointer-events: none;
+  border-radius: inherit;
+}
+@keyframes skeleton-shimmer{
+  100%{ transform: translateX(100%); }
+}
